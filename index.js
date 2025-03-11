@@ -9,10 +9,24 @@ function addListeners() {
             animaster().fadeIn(block, 5000);
         });
 
+    // Добавляем кнопку Reset для fadeIn
+    document.getElementById('fadeInReset')
+        .addEventListener('click', function () {
+            const block = document.getElementById('fadeInBlock');
+            animaster().reset(block, 'fadeIn');
+        });
+
     document.getElementById('movePlay')
         .addEventListener('click', function () {
             const block = document.getElementById('moveBlock');
             animaster().move(block, 1000, {x: 100, y: 10});
+        });
+
+    // Добавляем кнопку Reset для move
+    document.getElementById('moveReset')
+        .addEventListener('click', function () {
+            const block = document.getElementById('moveBlock');
+            animaster().reset(block, 'move');
         });
 
     document.getElementById('scalePlay')
@@ -21,16 +35,36 @@ function addListeners() {
             animaster().scale(block, 1000, 1.25);
         });
 
+    // Добавляем кнопку Reset для scale
+    document.getElementById('scaleReset')
+        .addEventListener('click', function () {
+            const block = document.getElementById('scaleBlock');
+            animaster().reset(block, 'scale');
+        });
+
     document.getElementById('fadeOutPlay')
         .addEventListener('click', function () {
             const block = document.getElementById('fadeOutBlock');
-            animaster().fadeOut(block, 1000, 1.25);
+            animaster().fadeOut(block, 1000);
+        });
+
+    // Добавляем кнопку Reset для fadeOut
+    document.getElementById('fadeOutReset')
+        .addEventListener('click', function () {
+            const block = document.getElementById('fadeOutBlock');
+            animaster().reset(block, 'fadeOut');
         });
 
     document.getElementById('moveAndHidePlay')
         .addEventListener('click', function () {
             const block = document.getElementById('moveAndHideBlock');
             animaster().moveAndHide(block, 3000);
+        });
+
+    document.getElementById('moveAndHideReset')
+        .addEventListener('click', function () {
+            const block = document.getElementById('moveAndHideBlock');
+            animaster().reset(block, 'moveAndHide');
         });
 
     document.getElementById('showAndHidePlay')
@@ -47,7 +81,6 @@ function addListeners() {
 
     document.getElementById('heartBeatingStop')
         .addEventListener('click', function () {
-            const block = document.getElementById('heartBeatingBlock');
             if (STOP) {
                 STOP.stop();
             }
@@ -131,7 +164,27 @@ function animaster() {
         },
         showAndHide(element, duration) {
             animaster().fadeIn(element, duration * 1 / 3);
-            setInterval(animaster().fadeOut, duration * 1 / 3, element, duration * 1 / 3);
+            setTimeout(animaster().fadeOut, duration * 1 / 3, element, duration * 1 / 3);
+        },
+        reset(element, animationType) {
+            switch (animationType) {
+                case 'fadeIn':
+                    resetFadeIn(element);
+                    break;
+                case 'fadeOut':
+                    resetFadeOut(element);
+                    break;
+                case 'move':
+                case 'scale':
+                    resetMoveAndScale(element);
+                    break;
+                case 'moveAndHide':
+                    resetMoveAndScale(element);
+                    resetFadeOut(element); // Так как moveAndHide комбинирует move и fadeOut
+                    break;
+                default:
+                    console.warn(`Unknown animation type: ${animationType}`);
+            }
         }
     };
 }
