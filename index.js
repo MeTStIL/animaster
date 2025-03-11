@@ -36,7 +36,7 @@ function addListeners() {
     document.getElementById('showAndHidePlay')
         .addEventListener('click', function () {
             const block = document.getElementById('showAndHideBlock');
-            animaster();
+            animaster().showAndHide(block, 3000);
         });
 
     document.getElementById('heartBeatingPlay')
@@ -113,6 +113,10 @@ function animaster() {
                 animaster().scale(element, 500, 1);
             }
         };
-    }
+    },
+        showAndHide(element, duration) {
+            animaster().fadeIn(element, duration * 1/3);
+            setInterval(animaster().fadeOut, duration * 1/3, element, duration * 1 / 3);
+        }
     }
 }
