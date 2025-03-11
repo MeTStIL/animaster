@@ -28,7 +28,7 @@ function addListeners() {
     document.getElementById('moveAndHidePlay')
         .addEventListener('click', function () {
             const block = document.getElementById('moveAndHideBlock');
-            animaster();
+            animaster().moveAndHide(block, 3000);
         });
 
     document.getElementById('showAndHidePlay')
@@ -40,7 +40,7 @@ function addListeners() {
     document.getElementById('heartBeatingPlay')
         .addEventListener('click', function () {
             const block = document.getElementById('heartBeatingBlock');
-            animaster();
+            animaster().hearBeating(block);
         });
 }
 
@@ -80,8 +80,26 @@ function animaster() {
         {
             element.style.transitionDuration = `${duration * 2.0 / 5}ms`;
             element.style.transform = getTransform({x: 100, y: 20}, null);
-
             setTimeout(animaster().fadeOut, duration * 2.0 / 5, element, duration * 3 / 5);
+        },
+        hearBeating(element) {
+        let scaleUp = true;
+
+        let a = 1;
+        function animateScale() {
+            if (scaleUp) {
+                animaster().scale(element, 500, a);
+            } else {
+                animaster().scale(element, 500, 1);
+            }
+            scaleUp = !scaleUp;
+            a += 0.05;
         }
+
+        const intervalId = setInterval(animateScale, 500);
+        return {
+            stop: () => clearInterval(intervalId),
+        };
+    }
     }
 }
